@@ -25,9 +25,7 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew testReleaseUnitTest
-    artifacts:
-      - app/build/outputs/**/*.apk
-
+    - save-gradle-cache@1: {}
   build_aab:
     summary:
     description:
