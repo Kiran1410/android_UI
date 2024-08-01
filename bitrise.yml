@@ -38,8 +38,8 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew testReleaseUnitTest
-            ls -lart cp -r app/build/reports/tests/
-            cp -r app/build/reports/tests/* /bitrise/deploy/
+            ls -lart cp -r app/build/reports/tests/testReleaseUnitTest
+            cp -r app/build/reports/tests/testReleaseUnitTest/* /bitrise/deploy/
             ls -lart /bitrise/deploy/
     - deploy-to-bitrise-io@2: 
   build_aab:
