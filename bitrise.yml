@@ -27,33 +27,35 @@ workflows:
             ./gradlew testReleaseUnitTest
     artifacts:
       - app/build/outputs/**/*.apk
+
+  workflows:
     build_aab:
-    summary:
-    description:
-    steps:
-    - git-clone@8: {}
-    - install-missing-android-tools@3:
-        inputs:
-        - gradlew_path: "$PROJECT_LOCATION/gradlew"
-    - script:
-        title: Build
-        inputs:
-        - content: |-
-            #!/bin/bash
-            # fail if any commands fails
-            ./gradlew bundleRelease
-    - script:
-        title: UnitTest
-        inputs:
-        - content: |-
-            #!/bin/bash
-            # fail if any commands fails
-            ./gradlew testReleaseUnitTest
-    artifacts:
-      - app/build/outputs/**/*.aab
-    meta:
-      bitrise.io:
-        machine_type_id: standard
+      summary:
+      description:
+      steps:
+      - git-clone@8: {}
+      - install-missing-android-tools@3:
+          inputs:
+          - gradlew_path: "$PROJECT_LOCATION/gradlew"
+      - script:
+          title: Build
+          inputs:
+          - content: |-
+              #!/bin/bash
+              # fail if any commands fails
+              ./gradlew bundleRelease
+      - script:
+          title: UnitTest
+          inputs:
+          - content: |-
+              #!/bin/bash
+              # fail if any commands fails
+              ./gradlew testReleaseUnitTest
+      artifacts:
+        - app/build/outputs/**/*.aab
+      meta:
+        bitrise.io:
+          machine_type_id: standard
 meta:
   bitrise.io:
     stack: linux-docker-android-22.04
