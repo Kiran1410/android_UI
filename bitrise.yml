@@ -28,7 +28,7 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ls -lart app/build/outputs/apk/release
-            cp app/build/outputs/apk/release/android-release.apk /bitrise/deploy/
+            cp app/build/outputs/apk/release/* /bitrise/deploy
             ls -lart /bitrise/deploy/
     - deploy-to-bitrise-io@2: {}
     - script:
@@ -38,6 +38,7 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew testReleaseUnitTest
+            ls -lart cp -r app/build/reports/tests/
             cp -r app/build/reports/tests/* /bitrise/deploy/
             ls -lart /bitrise/deploy/
     - deploy-to-bitrise-io@2: 
@@ -66,7 +67,7 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ls -lart app/build/outputs/apk/release
-            cp app/build/outputs/apk/release/android-release.aab /bitrise/deploy/
+            cp app/build/outputs/aab/release/* /bitrise/deploy/
             ls -lart /bitrise/deploy/
     - script:
         title: UnitTest
