@@ -51,8 +51,6 @@ workflows:
             ./gradlew testReleaseUnitTest
     artifacts:
       - app/build/outputs/**/*.aab
-    - save-gradle-cache@1: {}
-    - deploy-to-bitrise-io@2: {}
     meta:
       bitrise.io:
         machine_type_id: standard
