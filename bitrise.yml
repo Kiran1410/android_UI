@@ -18,6 +18,7 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew assembleRelease
+    - deploy-to-bitrise-io@2: {}
     - script:
         title: UnitTest
         inputs:
@@ -25,7 +26,6 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew testReleaseUnitTest
-    - save-gradle-cache@1: {}
     - deploy-to-bitrise-io@2: {}
   build_aab:
     summary:
