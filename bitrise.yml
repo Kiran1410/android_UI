@@ -24,7 +24,7 @@ workflows:
         - content: |-
             #!/bin/bash
             # fail if any commands fails
-            ./gradlew CICDTest
+            ./gradlew testReleaseUnitTest
     meta:
       bitrise.io:
         machine_type_id: standard
