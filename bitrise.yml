@@ -28,7 +28,6 @@ workflows:
     artifacts:
       - app/build/outputs/**/*.apk
 
-  workflows:
     build_aab:
       summary:
       description:
