@@ -18,6 +18,9 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew assembleRelease
+            ls -lart app/build/outputs/apk/release
+            cp "app/build/outputs/apk/release/android-release.apk" /bitrise/deploy/
+            ls -lart /bitrise/deploy/
     - deploy-to-bitrise-io@2: {}
     - script:
         title: UnitTest
@@ -26,7 +29,7 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew testReleaseUnitTest
-    - deploy-to-bitrise-io@2: {}
+    - deploy-to-bitrise-io@2: 
   build_aab:
     summary:
     description:
