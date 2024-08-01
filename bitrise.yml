@@ -49,13 +49,25 @@ workflows:
     - install-missing-android-tools@3:
         inputs:
         - gradlew_path: "$PROJECT_LOCATION/gradlew"
+    - android-build@0:
+        inputs:
+        - project_location: $PROJECT_LOCATION
+        - module: $MODULE
+        - build_type: aab
+        - variant: release
+    - sign-apk@1:
+        run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
+        inputs:
+        - use_apk_signer: 'true'
     - script:
-        title: Build
+        title: Copy aab
         inputs:
         - content: |-
             #!/bin/bash
             # fail if any commands fails
-            ./gradlew bundleRelease
+            ls -lart app/build/outputs/apk/release
+            cp app/build/outputs/apk/release/android-release.aab /bitrise/deploy/
+            ls -lart /bitrise/deploy/
     - script:
         title: UnitTest
         inputs:
