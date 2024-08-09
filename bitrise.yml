@@ -76,6 +76,11 @@ workflows:
             #!/bin/bash
             # fail if any commands fails
             ./gradlew testReleaseUnitTest
+    - google-play-deploy: 
+      inputs:   
+      - service_account_json_key_path: "$JSON_PATH"
+      - package_name: 
+      - track: 
     artifacts:
       - app/build/outputs/**/*.aab
     meta:
@@ -93,3 +98,6 @@ app:
   - opts:
       is_expand: false
     MODULE: app
+  - JSON_PATH: /Users/vagrant/git/
+      opts:
+        is_expand: false
