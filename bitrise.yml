@@ -1,0 +1,100 @@
+---
+format_version: '13'
+default_step_lib_source: https://github.com/bitrise-io/bitrise-steplib.git
+project_type: android
+workflows:
+  build_apk:
+    summary:
+    description:
+    steps:
+    - git-clone@8: {}
+    - install-missing-android-tools@3:
+        inputs:
+        - gradlew_path: "$PROJECT_LOCATION/gradlew"
+    - android-build@0:
+        inputs:
+        - project_location: $PROJECT_LOCATION
+        - module: $MODULE
+        - build_type: apk
+        - variant: release
+    - sign-apk@1:
+        run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
+        inputs:
+        - use_apk_signer: 'true'
+    - script:
+        title: Copy apk
+        inputs:
+        - content: |-
+            #!/bin/bash
+            # fail if any commands fails
+            ls -lart app/build/outputs/apk/release
+            cp app/build/outputs/apk/release/* /bitrise/deploy
+            ls -lart /bitrise/deploy/
+    - google-play-deploy: 
+        inputs:   
+        - service_account_json_key_path: /Users/vagrant/git/slotclub-de.json
+        - package_name: de.slotsclub.slots
+        - track: alpha
+    - deploy-to-bitrise-io@2: {}
+    - script:
+        title: UnitTest
+        inputs:
+        - content: |-
+            #!/bin/bash
+            # fail if any commands fail
+            ./gradlew testReleaseUnitTest
+            ls -lart cp -r app/build/reports/tests/testReleaseUnitTest
+            cp -r app/build/reports/tests/testReleaseUnitTest/* /bitrise/deploy/
+            ls -lart /bitrise/deploy/
+    - deploy-to-bitrise-io@2: 
+  build_aab:
+    summary:
+    description:
+    steps:
+    - git-clone@8: {}
+    - install-missing-android-tools@3:
+        inputs:
+        - gradlew_path: "$PROJECT_LOCATION/gradlew"
+    - android-build@0:
+        inputs:
+        - project_location: $PROJECT_LOCATION
+        - module: $MODULE
+        - build_type: aab
+        - variant: release
+    - sign-apk@1:
+        run_if: '{{getenv "BITRISEIO_ANDROID_KEYSTORE_URL" | ne ""}}'
+        inputs:
+        - use_apk_signer: 'true'
+    - script:
+        title: Copy aab
+        inputs:
+        - content: |-
+            #!/bin/bash
+            # fail if any commands fails
+            ls -lart app/build/outputs/apk/release
+            cp app/build/outputs/aab/release/* /bitrise/deploy/
+            ls -lart /bitrise/deploy/
+    - script:
+        title: UnitTest
+        inputs:
+        - content: |-
+            #!/bin/bash
+            # fail if any commands fails
+            ./gradlew testReleaseUnitTest
+    artifacts:
+      - app/build/outputs/**/*.aab
+    meta:
+      bitrise.io:
+        machine_type_id: standard
+meta:
+  bitrise.io:
+    stack: linux-docker-android-22.04
+    machine_type_id: standard
+app:
+  envs:
+  - opts:
+      is_expand: false
+    PROJECT_LOCATION: "."
+  - opts:
+      is_expand: false
+    MODULE: app
